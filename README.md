@@ -96,6 +96,8 @@ bağlanır — mükerrer müşteri kaydı oluşmaz.
 |---------|--------|-----|-------------|
 | `emlakci@baskentemlak.com` | `Emlak2026!` | Emlak Danışmanı | Tüm yönetim paneli |
 | `yonetici@baskentemlak.com` | `Emlak2026!` | Ofis Yöneticisi | Tüm yönetim paneli |
+| `fatih@baskentemlak.com` | `Emlak2026!` | Emlak Danışmanı | Tüm yönetim paneli |
+| `ibrahim@baskentemlak.com` | `Emlak2026!` | Emlak Danışmanı | Tüm yönetim paneli |
 | `ayse.demir@example.com` | `Musteri2026!` | Müşteri (ev sahibi) | "İlanlarım" — 3 ilanın etkileşim rakamları |
 | `ibrahim.yucel@example.com` | `Musteri2026!` | Müşteri (alıcı) | Talep, mesaj ve imzalı sözleşme |
 | `fatih.senol@example.com` | `Musteri2026!` | Müşteri (alıcı) | Satılık daire talebi |

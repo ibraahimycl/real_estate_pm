@@ -28,6 +28,8 @@ on conflict (id) do nothing;
 insert into profiller (id, ad, soyad, tckn, eposta, cep_telefon, ev_telefon, rol, il, ilce, kayit_kaynagi) values
  ('b0000000-0000-4000-8000-000000000001','Erdal','Türk','10000000002','emlakci@baskentemlak.com','05321110001','03124445566','emlakci','Ankara','Çankaya','emlakci'),
  ('b0000000-0000-4000-8000-000000000002','Beyzanur','Gürpınar','10000000003','yonetici@baskentemlak.com','05321110002',null,'yonetici','Ankara','Çankaya','emlakci'),
+ ('b0000000-0000-4000-8000-000000000003','Fatih Enes','Şenol','10000000004','fatih@baskentemlak.com','05321110003',null,'emlakci','Ankara','Çankaya','emlakci'),
+ ('b0000000-0000-4000-8000-000000000004','İbrahim','Yücel','10000000005','ibrahim@baskentemlak.com','05321110004',null,'emlakci','Ankara','Çankaya','emlakci'),
  -- Satıcı / kiraya veren müşteriler (ilan sahipleri)
  ('b0000000-0000-4000-8000-000000000011','Ayşe','Demir','12345678902','ayse.demir@example.com','05331110011','03122220011','musteri','Ankara','Çankaya','emlakci'),
  ('b0000000-0000-4000-8000-000000000012','Mehmet','Kaya','23456789013','mehmet.kaya@example.com','05331110012',null,'musteri','Ankara','Keçiören','emlakci'),
