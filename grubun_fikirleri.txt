@@ -1,0 +1,41 @@
+0-Deployment fikri = vercelde deploy edilecek free kullanım ile ve supabasede database için free olarak kullanılacak, çalışan uygulamanın bir link halinde herkes tarafından erişebilinir olması gerekcek.
+
+1-Talep sistemi gibi bir şey yapsak, müşteriler diyelim filtrelerden gölbaşı ve 2+1 evleri arıyor ama bulamıyor yada az buluyor, bunun verisini basit sayaçla tutsak sonra emlakçılara sunsak bunu, onlar da talep gören evleri görüp onları sunmaya çalışsak yazılı sorguları analiz etmeye girmeyiz.
+
+
+2-randevu modülünü de ekleyelim
+Ama saat yerine güne randevu alınabilsin, randevu alırken de bir iletişim numaraıs bırakılsın emlakçı da saati falan kişiyi arayıp konuşsun çünkü ev gezme işi falan çok esnek ya belli bi saat aralığı vermek zor olur gibi
+
+
+3-kira sözleşmesi emlakçı ve müşteri onay verdiğinde anlaştığını sistem üzerinden belirttiğinde direkt pdf olarak çıktı alınabilecek
+
+4-Projede özgün olan taraf şurası. Amacı anlatıyorum. Ama neyin yapıldığını varsaydığımız kısmı anlatıyorum ve neyin gösterileceğini anlatıyorum. Şimdi fikrin amacı şu. Şimdi kullanıcı, tamam mı? Ben bir müşteriyim. Emlakçıyı arıyorum. Telefonu kim açıyor? Emlakçı değil. AI açıyor. Tamam mı? Telefonu AI açıyor. AI diyor ki. İşte nasıl bir ev aradığını öğreniyor benden. Ben de diyorum ki nasıl bir ev aradığımı anlatıyorum. Şu fiyat aralığında, şu özelliklere sahip, asansörlü, şu katta olsun vesaire vesaire. Sonrasında AI bu özelliklere... sonrasında aslında ilk başta şey oluyor. Ben arıyorum. Ben diyorum ki şu ev için aradım. Bu evin fiyatı ne? AI de bana işte bilgi veriyor evle ilgili. Aynı zamanda bana diyor ki, sen diyor nasıl bir ev arıyorsun tam olarak? Bana aradığın evle ilgili özellikler söyler misin? Mevcut elimizdeki ilanlardan sana uygun olan varsa önerebilirim, diyor. Ben de diyorum ki işte biraz önce saydığım özellikleri sayıyorum. AI de varsa bana diyor ki, şu şu özellikte evlerimiz var aslında diyor. İstersen diyor ben sana link göndereyim, sen de linklerden evleri incele diyor. Ben de tamam gönder dersem, şu an aslında bizim planımız tabii WhatsApp üzerinden ama şey WhatsApp'ı entegre etmeyeceğiz; zaman alacağı için o ödev. Çünkü yetişmesi lazım. Sonrasında işte linkleri gönderiyor. Ha ürün de olmayabilir, aradığı özelliklere bizde ev. Diyordu ki, tamam ben senin nasıl bir ev aradığını öğrendim. İstersen ben senin telefon numaranı, adını soyadını ve nasıl bir ev aradığını bizim veri tabanına kaydedeyim. Bizim iyi ama senin aradığın kriterde bir şey düştüğü zaman, ev düştüğü zaman biz sana şey yapacağız. Mesaj atacağız desin. O da tamam desin. Onayı alırsa yapsın, onay almazsa yapmaz. Müşteri tamam derse, örneğin iki hafta sonra ilana şey girildi. Sisteme yeni bir ev ilanı girildi. AI yeni düşen ilanla mevcut müşteri şeylerini arıyor, talebi ediyor, şey veri tabanına bakıyor. A diyor, iki hafta önce biz İbrahim'le konuşmuştuk, şöyle bir ev arıyordu. Bu ev de düşmüş, bu İbrahim'in aradığı bir ev. Ben diyor İbrahim'e mesaj atayım. İbrahim, sen aradığın ev vardı ya, iki hafta önce konuşmuştuk, şöyle bir ilan var ve senin aradığın kriterlere uygun. İncelemek istersen bir göz at diye yapıştırıyorum mesajı müşteriye. Bu sayede iletişim kopmamış oluyor. Şimdi burada biz konuşmanın gerçekleştiği kısmını varsayıyoruz. Mesaj atma kısmı var ya, bunu entegre ediyoruz. Ama bunu da tabii ki de WhatsApp üzerinden entegre etmekle uğraşmayacağız. Sadece sistem içerisinde AI'ın kullanıcılara şey bir arayüz tasarlarız. O arayüzde sahte müşteriler olur, sahte mesajlar olur. Ama orada ilana yeni bir şey düştüğü zaman, ev düştüğü zaman, o evde daha önce bir müşteri ev arıyor ya, o kriterlere uyuyorsa hemen o ekranda mesajlar kısmı olur. O mesajlar kısmına ben tıklayayım, AI'ın mesaj attığını görmem lazım. Yani ilan düştükten sonra AI zaten çalıştığı için uyanık olacak. Aha, diyecek ilan düştü, bakayım bunu arayan müşteri var mı? Lan diyecek iki hafta önce İbrahim ne konuştu? İbrahim'de böyle bir ev arıyordu, ben buna bir yapıştırayım mesela diyecek. Yapıştıracak. sonrasında ne olacak? O mesajlar kısmında mesaj gönderildiğini ben göreceğim.
+Mesaj göndermek databasede kişinin aradığı ev dükkan tarzı bilgileri düşen ilan bilgileriyle veri tabanında bakıp kullanıcaya mesaj atacak ai için api key var en son onu test etmek için ben yeri gelince gerekli yere gireceğim.
+
+5-kişi evine olan görüntülenme kaydedilme gibi etkileşimleri de görür evini kaç kişi gördü kaydetti gibisinden. Sonra emlakçı tarafında bir dashboard olur kpi kartları ekşlenir fikren o ay kaç ev eklendi saatılık ve kiralık bazda sisteme, kaç ev kiralık verildi kaç ev satıldı ne kadar gelir elde edildi kar hesaplayamayız giderleri bilmediğimiz için. Gelir kafii bu aşamada.
+
+
+
+Proje Yönetimi Dersi Ödevi – Tier List
+Emlak Yönetim Sistemi (İş Analizi + Proje Yönetimi + Çalışan MVP)
+S+ | Kesinlikle Eksiksiz Yapılacaklar
+- Çalışan 4 modüllü MVP (İş Yeri, Müşteri, Emlak, Emlak Arama)
+- Canlı veritabanı ile CRUD işlemleri (kayıt, güncelleme, silme)
+- Filtreli emlak arama ve çıktı alma (liste/rapor)
+- Genel ve modül bazlı varsayımlar ve kısıtlar
+- Resmî şablona eksiksiz uyum (tüm zorunlu bölümler)
+- FR, BR, NFR, UC için benzersiz kodlama sistemi
+- Dört ekip üyesinin tüm projeye hâkimiyeti (çapraz sorgu)
+S | Yüksek Notun Temelini Oluşturacaklar
+- Mantıksal Çerçeve Matrisi (4x4)
+- Gantt şeması ve kaynak planlaması
+- Bütçe planı
+- Gereksinim izlenebilirlik matrisi (BR ↔ FR ↔ UC ↔ Test)
+- Alternatif ve istisnai kullanım senaryoları
+- ERD (varlık-ilişki diyagramı) ve veri sözlüğü
+- Test dokümantasyonu (test türleri, senaryolar, araçlar)
+- Ekran alanları ve validasyon (doğrulama) tabloları
+- Epic – Story – Task hiyerarşisi
+- Uçtan uca iş akış diyagramları
+
+Bu tier liste bizim geliştireceğimiz web sitesi için olanlara odaklanalım biz onun dışında kalanlar başka görevler odak noktalarımız şuan onlar değil web uygulamasını içerenler.

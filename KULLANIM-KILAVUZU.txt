@@ -1,0 +1,407 @@
+===============================================================================
+  BAŞKENT EMLAK — EMLAK YÖNETİM PLATFORMU
+  Kullanım Kılavuzu: Hangi rol neyi yapabilir, hangi akış nerede görünür?
+===============================================================================
+
+Bu doküman, sistemi ilk kez açan birinin "burası ne, nasıl kullanılıyor, yaptığım
+işlem nereye düştü?" sorularını cevaplamak için yazıldı.
+
+Sistemde üç kullanıcı tipi vardır:
+
+  ZİYARETÇİ  : Henüz giriş yapmamış kişi.
+  MÜŞTERİ    : Siteye kayıt olmuş kişi. Ev arayan da olabilir, evini emlak
+               ofisine vermiş ev sahibi de. Ayrı rol yoktur, aynı hesap ikisini
+               birden yapabilir.
+  EMLAKÇI    : Ofis çalışanı. Hesabı kendisi açamaz, sistem yöneticisi tanımlar.
+               (Ofis Yöneticisi rolü de aynı ekranları kullanır.)
+
+Önemli kural: Kayıt ol ekranından açılan HER hesap müşteri olur. Emlakçı
+hesapları veritabanına elle eklenir — bu yüzden dışarıdan kimse kendini emlakçı
+yapamaz.
+
+
+===============================================================================
+  BÖLÜM 1 — HERKESİN KULLANABİLDİĞİ YERLER
+===============================================================================
+(Giriş yapmış ya da yapmamış, fark etmez.)
+
+1.1  İLAN VİTRİNİ                                              Adres: /
+     Ofisin yayındaki tüm ilanları kart kart listelenir. Soldaki filtre
+     panelinden daraltılır:
+       - Kiralık / Satılık
+       - Emlak türü (daire, villa, dükkan, ofis, arsa...)
+       - İl ve ilçe
+       - Alt ve üst bütçe
+       - Oda sayısı: yaygın olanlar kutucuk olarak hazır; listede yoksa
+         "Oda" ve "Salon" kutularına kendiniz yazarsınız (örn. 7 + 3)
+       - En az metrekare, en fazla bina yaşı
+       - Asansör, otopark, eşyalı, site içinde, krediye uygun
+       - Sıralama: en yeni / fiyat artan / fiyat azalan / alana göre
+
+     NOT: Yaptığınız her arama sisteme kaydedilir. Sonuç dönmeyen aramalar
+     emlakçının "Talep Analizi" ekranına düşer (bkz. 3.7). Yani hiçbir şey
+     bulamadığınız bir arama bile ofis için değerli bilgidir.
+
+1.2  İLAN DETAYI                                      Adres: /ilan/<ilan-id>
+     Fotoğraflar, fiyat, tüm nitelikler (oda, m², kat, bina yaşı, ısıtma,
+     aidat, depozito) ve ek özellikler. Sayfanın altında ilanın kaç kez
+     görüntülendiği ve kaç kişi tarafından kaydedildiği yazar.
+
+     Bu sayfada iki işlem yapılır:
+       - İLANI KAYDET  : Giriş gerektirir. Giriş yapmamışsanız giriş ekranına
+                         yönlendirilir, girince aynı ilana geri dönersiniz.
+       - RANDEVU TALEBİ: Giriş GEREKTİRMEZ. Ad, telefon ve bir gün seçersiniz.
+
+     Randevuda neden saat yok? Ev gezme işi esnektir; saat vermek yerine gün
+     alıyoruz, danışman sizi arayıp saati birlikte belirliyor. İsterseniz bir
+     de alternatif gün bırakabilirsiniz.
+
+     Ev sahibinin adı ve evin açık adresi bu sayfada GÖSTERİLMEZ. Bu bilgiler
+     yalnızca ofis içinde görünür.
+
+1.3  AI EMLAK DANIŞMANI                              Adres: /ai-danisman
+     Ofisi telefonla aramanın sistem içindeki karşılığıdır. Sohbet kutusuna
+     aradığınız yeri normal cümlelerle anlatırsınız:
+
+        "Gölbaşı'nda 2+1 kiralık ev arıyorum, bütçem 25 bin, asansörlü olsun"
+        "Çankaya'da eşyalı 1+1 kiralık var mı?"
+        "3 numaralı ilanın fiyatı ne kadar?"
+
+     Danışman ne yapar?
+       1. Portföyü GERÇEKTEN sorgular. Uydurma ilan söylemez; size okuduğu
+          her ilan veritabanında vardır.
+       2. Uygun kayıt varsa listeler.
+       3. Uygun kayıt yoksa ya da siz isterseniz, kriterlerinizi kaydetmeyi
+          TEKLİF eder: "Adınızı ve telefonunuzu alayım, uygun ilan düştüğünde
+          haber verelim."
+       4. Siz açıkça onay verirseniz kaydeder. Onay vermeden asla kaydetmez.
+
+     Bu neden önemli? Çünkü asıl değer burada: siz aradığınızı bulamadan
+     kapattığınızda bile ofis sizi unutmaz. İki hafta sonra kriterlerinize
+     uyan bir ilan girildiğinde sistem sizi hatırlar ve mesaj gönderir
+     (bkz. 4.2 — Talep Eşleştirme Akışı).
+
+     Giriş yapmadan da kullanılabilir. Giriş yapmışsanız talep hesabınıza
+     bağlanır ve "Taleplerim" ekranınızda görünür.
+
+1.4  KAYIT OL / GİRİŞ YAP                         Adres: /kayit · /giris
+     Ad, soyad, e-posta, cep telefonu ve parola ile hesap açılır.
+
+     ÖNEMLİ: Emlak ofisi sizi daha önce müşteri olarak kaydettiyse, AYNI
+     e-posta ile üye olun. Sistem kaydınızı otomatik olarak hesabınıza bağlar;
+     ikinci bir müşteri kaydı oluşmaz ve varsa ilanlarınız hemen görünür.
+
+
+===============================================================================
+  BÖLÜM 2 — SADECE MÜŞTERİNİN KULLANABİLDİĞİ YERLER
+===============================================================================
+(Giriş yaptıktan sonra sağ üstteki adınıza tıklayarak girilir. Adres: /hesabim)
+
+2.1  ÖZET                                              /hesabim
+     Kaç ilan kaydettiğiniz, kaç aktif talebiniz, kaç randevunuz ve okunmamış
+     mesajınız olduğunu tek ekranda gösterir. Her karttan ilgili sayfaya
+     geçilir.
+
+2.2  PROFİL BİLGİLERİM                                 /hesabim/profilim
+     Ad, soyad, TCKN, telefonlar ve adres güncellenir.
+     E-posta DEĞİŞTİRİLEMEZ — ilanlarınızın hesabınıza bağlanmasında anahtar
+     olarak kullanıldığı için sabittir.
+     TCKN alanı kira sözleşmesi düzenlenecekse doldurulmalıdır.
+
+2.3  KAYDETTİĞİM İLANLAR                               /hesabim/favorilerim
+     "İlanı kaydet" dediğiniz ilanlar burada toplanır.
+     Kaydetmeniz ilan sahibine toplam sayı olarak yansır; kim olduğunuz
+     paylaşılmaz.
+
+2.4  TALEPLERİM                                        /hesabim/taleplerim
+     Aradığınız kriterlerin kayıtlı hâli. "Yeni Talep" ile oluşturulur:
+     işlem türü, ilçe, bütçe aralığı, oda sayısı (yine elle de yazılabilir),
+     en az m², en fazla bina yaşı ve olmazsa olmaz şartlar (asansör, otopark,
+     eşyalı) girilir.
+
+     Formun sonundaki onay kutusu kritiktir:
+       İŞARETLİ   -> Kriterlerinize uyan ilan düştüğünde size mesaj gelir.
+       İŞARETSİZ  -> Talebiniz yine kaydedilir, danışman görür, ama size
+                     otomatik mesaj gönderilmez.
+
+     Bu izni listeden dilediğiniz zaman açıp kapatabilir ("Bildirimleri
+     kapat/aç"), talebinizi kapatabilirsiniz.
+
+2.5  MESAJLARIM                                        /hesabim/mesajlarim
+     Kriterlerinize uyan yeni bir ilan girildiğinde sistemin size gönderdiği
+     bildirimler burada görünür. Her mesajın altında ilgili ilanın kartı
+     vardır, tıklayınca ilana gidersiniz.
+
+2.6  RANDEVULARIM                                      /hesabim/randevularim
+     İlan sayfalarından bıraktığınız randevu talepleri; hangi ilan için,
+     hangi gün, hangi durumda olduğu ve danışmanın notu görünür.
+     Durumlar: Talep Alındı -> Onaylandı -> Tamamlandı (ya da İptal)
+
+2.7  İLANLARIM                                         /hesabim/ilanlarim
+     Bu bölüm EV SAHİPLERİ içindir. Evinizi emlak ofisine verdiyseniz ve
+     ofis sizi aynı e-posta ile kaydettiyse, ilanlarınız burada listelenir.
+
+     Ne görürsünüz: ilanın kaç kez görüntülendiği, kaç kişinin kaydettiği,
+     kaç randevu talebi geldiği. Üstte de hepsinin toplamı.
+
+     Ne YAPAMAZSINIZ: ilanı düzenleyemez, fiyatını değiştiremez, fotoğraf
+     ekleyemezsiniz. İlan metni ve fiyat danışmanın sorumluluğundadır;
+     değişiklik için ofisle görüşürsünüz. Bu bir eksiklik değil, bilinçli bir
+     kuraldır ve veritabanı seviyesinde uygulanır.
+
+     Hiç ilanınız yoksa bu sayfa boş görünür, normaldir.
+
+2.8  AI GÖRÜŞMELERİM                                  /hesabim/gorusmelerim
+     AI danışmanla yaptığınız konuşmaların kaydı. Her görüşmenin tarihi, kaç
+     mesaj sürdüğü ve talebe dönüşüp dönüşmediği listelenir; üzerine
+     tıklayınca konuşmanın tamamını okursunuz.
+     Kendi konuşmanızdan başkasını göremezsiniz.
+
+2.9  SÖZLEŞMELERİM                                     /hesabim/sozlesmelerim
+     Kiracı veya ev sahibi olarak taraf olduğunuz kira sözleşmeleri.
+     Danışman sözleşme taslağını hazırladığında buraya düşer; şartları
+     (dönem, kira, depozito, özel şartlar) okur ve "Sözleşmeyi onaylıyorum"
+     dersiniz. İki taraf da onayladığında sözleşme imzalanmış sayılır.
+
+
+===============================================================================
+  BÖLÜM 3 — SADECE EMLAKÇININ KULLANABİLDİĞİ YERLER
+===============================================================================
+(Giriş yapınca otomatik olarak buraya düşersiniz. Adres: /panel)
+
+3.1  GENEL BAKIŞ (Dashboard)                           /panel
+     Ofisin durumunu tek ekranda gösterir:
+       - Aktif portföy, bu ay eklenen ilan (geçen aya göre değişimle)
+       - Bu ay kiralanan / satılan, bu ay elde edilen komisyon geliri
+       - Yanıt bekleyen randevu, aktif müşteri talebi, okunmamış AI mesajı,
+         sonuçsuz arama sayısı
+       - Son 6 ayın ilan girişi ve gerçekleşen işlem grafikleri
+       - En çok ilgi gören ilanlar
+       - Portföyde eksik kalanlar (en çok aranıp bulunamayan kriterler)
+
+     Gider bilgisi tutulmadığı için kâr hesaplanmaz; gelir ve komisyon
+     gösterilir.
+
+3.2  İŞ YERİ TANIMI                                    /panel/isyeri
+     Emlak işletmesinin unvanı, yetkilisi, vergi bilgileri, adresi ve
+     iletişim bilgileri. Tek kayıttır, güncellenir.
+     Bu bilgiler ilan çıktılarının ve kira sözleşmelerinin antetinde,
+     ayrıca sitenin alt bilgisinde kullanılır.
+     İlk kurulumda bu ekran doldurulmadan emlak kaydı yapılamaz.
+
+3.3  MÜŞTERİ TANIMI                                    /panel/musteriler
+     Alıcı, satıcı, kiracı ve ev sahibi — tüm müşteriler burada tutulur.
+     Ad, soyad, e-posta, telefonlar, TCKN, adres ve ofis içi not girilir.
+     Listede ad, telefon, e-posta veya TCKN ile arama yapılır.
+
+     Yeşil nokta: müşterinin siteye üye olduğunu ve kaydın hesabına
+     bağlandığını gösterir.
+
+     Müşteri detayında portföyündeki ilanlar ve arama talepleri de görünür.
+     Portföyünde ilanı olan müşteri SİLİNEMEZ (önce ilanlar aktarılmalı).
+
+     SIRA ÖNEMLİ: Emlak kaydı bir sahibe bağlanır. Bu yüzden önce müşteri
+     kaydı açılır, sonra o müşteriye ait ilan girilir.
+
+3.4  EMLAK TANIMI (Portföy)                            /panel/emlaklar
+     Ofisin tüm ilanları. Başlık/ilçe/ilan numarasıyla aranır, işlem türü ve
+     duruma göre filtrelenir.
+
+     Yeni ilan girilirken:
+       - Sahibi (müşteri listesinden seçilir)
+       - Başlık, açıklama, işlem türü, emlak türü, durum
+       - Fiyat, aidat, depozito
+       - Brüt/net m², oda + salon sayısı, kat, bina kat sayısı, bina yaşı,
+         ısıtma, banyo sayısı
+       - Asansör, otopark, balkon, eşyalı, site içinde, krediye uygun
+       - İl, ilçe, mahalle ve açık adres (açık adres sitede gösterilmez)
+
+     Sistem hatalı girişi engeller: net alan brütten büyük olamaz, bulunduğu
+     kat bina kat sayısını aşamaz, fiyat ve metrekare sıfırdan büyük olmalıdır.
+
+     Durumlar: Aktif ve Rezerve olan ilanlar sitede görünür; Kiralandı,
+     Satıldı ve Pasif olanlar görünmez.
+
+     İlan detay sayfasında ayrıca:
+       - Fotoğraf yükleme/silme, kapak fotoğrafı seçme
+       - İlanın görüntülenme/kaydedilme/randevu sayıları
+       - Bu ilana uyan müşteri talepleri ve uyum yüzdeleri
+       - "Yazıcı çıktısı" butonu
+
+3.5  EMLAK ARAMA                                       /panel/arama
+     Ofise gelen veya telefon eden alıcı müşterinin isteklerini soldaki
+     panele girip portföyde karşılığı var mı diye bakarsınız.
+     Sonuç listesindeki her satırın sağında "Yazdır" butonu vardır:
+     müşteriye verebileceğiniz, ofis antetli bir ilan föyü üretir.
+
+     Sonuç çıkmazsa sistem bunu da kaydeder ve size "bu kriterde portföy
+     eksiğimiz var" diye Talep Analizi ekranında gösterir.
+
+3.6  MÜŞTERİ TALEPLERİ                                 /panel/talepler
+     Müşterilerin kayıtlı arama kriterleri. Nereden geldiği de yazar:
+     Web Formu / AI Görüşmesi / Danışman Kaydı.
+
+     "İzinli" rozeti olanlar otomatik mesaj alabilir; "İzin yok" yazanlara
+     sistem mesaj GÖNDERMEZ (kişisel verilerin korunması gereği) — ama
+     eşleşme size yine de görünür, telefonla arayabilirsiniz.
+
+     Talebin detayında o kritere uyan mevcut ilanlar uyum yüzdesiyle sıralanır.
+
+3.7  TALEP ANALİZİ                                     /panel/talep-analizi
+     Müşterilerin aradığı ama portföyde karşılığı olmayan kriterler.
+     Örnek satır: "Gölbaşı · kiralık · 2+1 → 14 sonuçsuz arama"
+
+     Bu ekran "hangi bölgede hangi tip eve ihtiyaç var?" sorusunu veriyle
+     cevaplar. Danışman bu listeye bakıp o bölgede portföy toplamaya gider.
+     Sağdaki "Sorgula" butonu o kriterle aramayı açar.
+
+3.8  RANDEVULAR                                        /panel/randevular
+     Müşterilerin bıraktığı randevu talepleri, en yakın güne göre sıralı.
+     Menüdeki turuncu rozet yanıt bekleyen talep sayısını gösterir.
+
+     Her satırda müşterinin adı, tıklanabilir telefonu, hangi ilan, tercih
+     ettiği ve alternatif günü, notu bulunur. Durumu değiştirip ("Onaylandı",
+     "Tamamlandı", "İptal") danışman notu yazarsınız — müşteri bu notu kendi
+     "Randevularım" ekranında görür.
+
+3.9  AI MESAJLARI                                      /panel/mesajlar
+     Yeni bir ilan girildiğinde kriterleri tutan müşterilere otomatik üretilen
+     bildirim mesajları. Her mesajda müşteri adı, telefonu, uyum yüzdesi,
+     mesajın tam metni ve ilgili ilanın bağlantısı vardır.
+     Menüdeki rozet okunmamış mesaj sayısını gösterir.
+
+     Aynı müşteriye aynı ilan için ikinci kez mesaj gönderilmez.
+
+3.10 AI GÖRÜŞMELERİ                                    /panel/gorusmeler
+     Müşterilerin AI danışmanla yaptığı tüm konuşmaların kaydı. Listede
+     tarih, arayanın adı ve telefonu, ilk sorusu, mesaj sayısı ve görüşmenin
+     talebe dönüşüp dönüşmediği görünür.
+
+     "Oku" dediğinizde konuşmanın tamamı, müşterinin gördüğü sohbet
+     düzeninde açılır. Sağ tarafta o görüşmeden doğan talep ve bu talebe
+     uyan ilan sayısı da gösterilir.
+
+     Ne işe yarar? Bir müşteri iki hafta sonra tekrar aradığında ya da ona
+     mesaj gitmişken telefon ettiğinde, "ne konuşmuştuk?" sorusunun cevabı
+     buradadır. Talep detay ekranında da "Bu talep bir AI görüşmesinden
+     doğdu → Konuşmanın tamamını oku" bağlantısı bulunur.
+
+3.11 SÖZLEŞMELER                                       /panel/sozlesmeler
+     Kira sözleşmeleri. "Yeni Sözleşme" ile taslak açılır: kiralanan ilan ve
+     kiracı müşteri seçilir (ev sahibi ilandan otomatik gelir), dönem, kira
+     bedeli, depozito ve özel şartlar girilir.
+
+     Sonra çift taraflı onay gerekir: önce danışman onaylar, sonra müşteri
+     kendi hesabından onaylar. İkisi tamamlanınca durum "İmzalandı" olur ve
+     "Sözleşme çıktısı" butonu aktifleşir. Çıktı, tarafların kimlik
+     bilgilerini, kiralananın niteliklerini, genel hükümleri ve imza
+     alanlarını içeren tam bir kira sözleşmesidir; tarayıcıdan yazdırılır
+     veya PDF olarak kaydedilir.
+
+     Sözleşme imzalanınca ilan otomatik "Kiralandı" durumuna geçer ve
+     komisyon geliri dashboard'a yansır.
+
+
+===============================================================================
+  BÖLÜM 4 — UÇTAN UCA AKIŞLAR (kim ne yapınca nerede görünüyor?)
+===============================================================================
+
+4.1  TEMEL AKIŞ — Ev sahibinden ilana, alıcıdan çıktıya
+     1. Emlakçı  : İş Yeri Tanımı'nı doldurur.                 /panel/isyeri
+     2. Emlakçı  : Evini verecek müşteriyi kaydeder.        /panel/musteriler
+     3. Emlakçı  : O müşteriye ait kiralık evi girer.        /panel/emlaklar
+     4. Emlakçı  : Alıcı müşteriyi de kaydeder.             /panel/musteriler
+     5. Emlakçı  : Alıcının isteklerini arama ekranına girer.   /panel/arama
+     6. Emlakçı  : Uygun kaydın yazıcı çıktısını alıp müşteriye verir.
+
+4.2  TALEP EŞLEŞTİRME AKIŞI — projenin en ayırt edici özelliği
+     1. Müşteri  : Aradığını bulamaz. AI danışmanla konuşur veya talep formunu
+                   doldurur; "haber verin" iznini verir.
+                                              /ai-danisman · /hesabim/taleplerim
+     2. Sistem   : Talebi kaydeder. Emlakçı bunu /panel/talepler'de görür.
+     3. (Günler sonra) Emlakçı yeni bir ilan girer.      /panel/emlaklar/yeni
+     4. Sistem   : Kaydetme anında tüm aktif talepleri tarar, uyanları bulur,
+                   izinli olanlara mesaj üretir. Emlakçıya "1 müşteriye mesaj
+                   üretildi" uyarısı çıkar.
+     5. Emlakçı  : Mesajı ve uyum yüzdesini görür.            /panel/mesajlar
+     6. Müşteri  : Aynı mesajı kendi hesabında görür.    /hesabim/mesajlarim
+     Böylece müşteriyle kurulan temas kopmaz.
+
+     Konuşmanın tamamı saklanır: danışman /panel/gorusmeler'den, müşteri
+     /hesabim/gorusmelerim'den aynı kaydı okuyabilir.
+
+     Eşleştirme ne zaman çalışır?
+       - Panelden yeni ilan kaydedildiğinde (otomatik)
+       - Bir ilan "Pasif/Rezerve" durumundan "Aktif"e çevrildiğinde (otomatik)
+       - İlan sayfasındaki "Yeniden tara" bağlantısına basıldığında (elle) —
+         ilan girildikten SONRA yeni bir talep açılmışsa bunun için kullanılır
+
+4.3  RANDEVU AKIŞI
+     1. Ziyaretçi/Müşteri : İlan sayfasından gün seçip telefon bırakır.
+     2. Emlakçı           : Talebi /panel/randevular'da görür (menüde rozet).
+     3. Emlakçı           : Müşteriyi arar, saati belirler, durumu "Onaylandı"
+                            yapar ve notunu yazar.
+     4. Müşteri           : Durumu ve notu /hesabim/randevularim'da görür.
+
+4.4  KİRA SÖZLEŞMESİ AKIŞI
+     1. Emlakçı : Taslağı oluşturur.                /panel/sozlesmeler/yeni
+     2. Emlakçı : Danışman olarak onaylar.
+     3. Müşteri : Kendi hesabından onaylar.      /hesabim/sozlesmelerim
+     4. Sistem  : Durum "İmzalandı" olur, ilan "Kiralandı" durumuna geçer,
+                  komisyon geliri dashboard'a yansır.
+     5. Emlakçı : Sözleşme çıktısını yazdırır veya PDF yapar.
+
+4.5  EV SAHİBİ İSTATİSTİK AKIŞI
+     1. Emlakçı  : İlanı girerken sahibini müşteri listesinden seçer.
+     2. Ev sahibi: Aynı e-posta ile siteye üye olur.
+     3. Sistem   : Kaydı hesabına bağlar.
+     4. Ev sahibi: /hesabim/ilanlarim'da evinin kaç kez görüntülendiğini,
+                   kaç kişinin kaydettiğini ve kaç randevu geldiğini görür.
+                   Düzenleme yapamaz.
+
+4.6  PORTFÖY EKSİĞİ AKIŞI
+     1. Ziyaretçi: Filtreyle arar, sonuç çıkmaz.
+     2. Sistem   : Aramayı kaydeder.
+     3. Emlakçı  : /panel/talep-analizi'nde "bu bölgede bu tip ev aranıyor
+                   ama bizde yok" listesini görür.
+     4. Emlakçı  : O bölgeye portföy toplamaya yönelir.
+
+
+===============================================================================
+  BÖLÜM 5 — SIK SORULAN SORULAR
+===============================================================================
+
+S: Giriş yapmadan ne yapabilirim?
+C: İlanlara bakabilir, filtreleyebilir, AI danışmanla konuşabilir ve randevu
+   talebi bırakabilirsiniz. İlan kaydetmek ve talep listesi tutmak için üyelik
+   gerekir.
+
+S: Kayıt oldum ama "İlanlarım" boş görünüyor.
+C: Normaldir. Orası yalnızca evini bu ofise vermiş kişiler içindir. Ofis sizi
+   aynı e-posta ile kaydettiyse ilanlarınız otomatik görünür.
+
+S: Kendimi emlakçı yapabilir miyim?
+C: Hayır. Kayıt olan herkes müşteri olur; emlakçı hesapları yalnızca
+   veritabanından tanımlanır.
+
+S: AI danışman bilgileri uyduruyor mu?
+C: Hayır. Yalnızca veritabanındaki gerçek ilanları okur. Olmayan bir ev
+   öneremez.
+
+S: Talep bıraktım, mesaj gelmedi.
+C: Üç ihtimal: (1) henüz kriterlerinize uyan bir ilan girilmedi, (2) talebin
+   bildirim izni kapalı, (3) talebiniz kapatılmış. "Taleplerim" ekranından
+   kontrol edebilirsiniz.
+
+S: Randevuya neden saat seçemiyorum?
+C: Bilerek. Ev gezme saatleri esnek olduğu için gün alınır, saati danışman
+   sizi arayıp birlikte belirler.
+
+S: Ev sahibi kendi ilanını neden düzenleyemiyor?
+C: İlan metni, fiyat ve fotoğraflar ofisin sorumluluğundadır. Ev sahibi
+   yalnızca ilanının ne kadar ilgi gördüğünü izler.
+
+S: Sözleşme çıktısını neden alamıyorum?
+C: Çıktı yalnızca her iki taraf da onayladıktan sonra açılır.
+
+===============================================================================

@@ -1,0 +1,25 @@
+# bağımlılıklar
+node_modules/
+.pnp
+.pnp.js
+
+# build çıktıları
+web/.next/
+web/out/
+web/build/
+next-env.d.ts
+
+# ortam değişkenleri (API anahtarları ASLA repoya girmez)
+.env
+.env.local
+.env*.local
+
+# işletim sistemi / editör
+.DS_Store
+*.pem
+.vercel
+*.tsbuildinfo
+
+# log
+npm-debug.log*
+yarn-error.log*

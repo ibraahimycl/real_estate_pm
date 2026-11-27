@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* =====================================================================
+   EMLAK YÖNETİM PLATFORMU — TASARIM BELİRTEÇLERİ
+   Renk yönü: nötr taş zemin + derin çam yeşili kurumsal vurgu +
+   dikkat çekmesi gereken eylemler için bakır.
+   ===================================================================== */
+@theme {
+  --color-zemin: #faf9f7;
+  --color-yuzey: #ffffff;
+  --color-yuzey-alt: #f4f2ee;
+  --color-cizgi: #e4e0d8;
+  --color-cizgi-koyu: #d2cdc2;
+
+  --color-metin: #1c1b18;
+  --color-metin-ikincil: #57534a;
+  --color-metin-silik: #8a857a;
+
+  --color-marka-50: #eef4f1;
+  --color-marka-100: #d6e5dd;
+  --color-marka-300: #8fb6a4;
+  --color-marka-500: #3f7a60;
+  --color-marka-600: #2f6049;
+  --color-marka-700: #244c3a;
+  --color-marka-900: #16301f;
+
+  --color-vurgu-100: #fbeadb;
+  --color-vurgu-500: #c2703a;
+  --color-vurgu-600: #a85c2b;
+
+  --color-basari-100: #ddf0e3;
+  --color-basari-600: #2f7d4f;
+  --color-uyari-100: #fcf0d4;
+  --color-uyari-600: #96701a;
+  --color-hata-100: #fbe2e0;
+  --color-hata-500: #c0392b;
+  --color-hata-600: #9c2d21;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius-kart: 0.75rem;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-zemin);
+  color: var(--color-metin);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Rakam hizalaması: fiyat ve KPI tablolarında sütunlar kaymasın */
+.rakam {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Klavye ile gezinenler için görünür odak halkası (NFR: erişilebilirlik) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-marka-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* =====================================================================
+   YAZICI ÇIKTISI — Modül 4 "yazıcı çıktısı alınabilecektir" gereksinimi
+   ===================================================================== */
+@media print {
+  body {
+    background: #fff;
+  }
+  .yazdirma-gizle {
+    display: none !important;
+  }
+  .yazdirma-sayfa {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+  }
+  a[href]::after {
+    content: "";
+  }
+  table {
+    page-break-inside: avoid;
+  }
+}
