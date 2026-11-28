@@ -81,6 +81,14 @@ Supabase SQL Editor'da **sırayla** çalıştırın:
 | `db/03_seed.sql` | Örnek/test verisi (ofis, müşteriler, 12 ilan, talepler, randevular) |
 | `db/04_grants.sql` | Rol bazlı tablo ayrıcalıkları |
 
+> Çalıştırma sırası: **01 → 02 → 04 → 03**. Seed verisi yazılırken
+> ayrıcalıkların tanımlı olması gerekir.
+>
+> Ekip olarak veritabanında değişiklik yapacaksanız önce
+> **[db/VERITABANI-REHBERI.md](db/VERITABANI-REHBERI.md)** dosyasını okuyun:
+> erişim alma, artımlı değişiklik (migration) yazma, demo verisini sıfırlama
+> ve güvenlik katmanlarını bozmama kuralları orada.
+
 Ardından Supabase panelinden `ilan-fotograflari` adında **public** bir Storage
 kovası oluşturun (5 MB sınır, yalnızca görsel MIME türleri).
 

@@ -23,3 +23,9 @@ next-env.d.ts
 # log
 npm-debug.log*
 yarn-error.log*
+
+# Ortam değişkeni kopyaları — gerçek anahtar içerir, asla commit edilmez
+vercel-degiskenler.txt
+*degisken*.txt
+*secret*
+*.key
