@@ -111,25 +111,35 @@ export default async function HesabimSayfasi() {
           </KartGovde>
         </Kart>
 
-        {(ilan ?? 0) > 0 && (
-          <Kart>
-            <KartGovde>
-              <h2 className="font-semibold text-metin">Mülkleriniz</h2>
-              <p className="mt-1 text-sm text-metin-ikincil">
-                Emlak ofisine verdiğiniz{" "}
-                <strong className="text-metin">{ilan}</strong> ilan var. İlan
-                metinlerini danışmanınız yönetir; siz ilanlarınızın kaç kez
-                görüntülendiğini ve kaç kişi tarafından kaydedildiğini
-                izleyebilirsiniz.
-              </p>
-              <div className="mt-4">
+        <Kart>
+          <KartGovde>
+            <h2 className="font-semibold text-metin">
+              {(ilan ?? 0) > 0 ? "Mülkleriniz" : "Mülkünüzü Satın veya Kiralayın"}
+            </h2>
+            <p className="mt-1 text-sm text-metin-ikincil">
+              {(ilan ?? 0) > 0 ? (
+                <>
+                  Emlak ofisine verdiğiniz{" "}
+                  <strong className="text-metin">{ilan}</strong> ilan var. Yeni
+                  bir mülk için ilan talebi oluşturup danışman onayına
+                  gönderebilirsiniz.
+                </>
+              ) : (
+                "Satmak veya kiralamak istediğiniz mülkün bilgilerini girip emlak danışmanı onayına gönderebilirsiniz."
+              )}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <BagButon href="/hesabim/ilanlarim/yeni">
+                Yeni İlan Oluştur
+              </BagButon>
+              {(ilan ?? 0) > 0 && (
                 <BagButon href="/hesabim/ilanlarim" gorunum="ikincil">
                   İlanlarımı gör
                 </BagButon>
-              </div>
-            </KartGovde>
-          </Kart>
-        )}
+              )}
+            </div>
+          </KartGovde>
+        </Kart>
       </div>
     </>
   );

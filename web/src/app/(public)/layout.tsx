@@ -14,7 +14,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-30 border-b border-cizgi bg-yuzey/95 backdrop-blur yazdirma-gizle">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-          <Marka />
+          <Marka unvan={ofis?.unvan} />
 
           <nav className="ml-auto hidden items-center gap-1 sm:flex">
             <Link
@@ -63,7 +63,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
       <footer className="border-t border-cizgi bg-yuzey yazdirma-gizle">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:grid-cols-3 sm:px-6">
           <div>
-            <Marka boyut="sm" />
+            <Marka boyut="sm" unvan={ofis?.unvan} />
             <p className="mt-3 text-sm text-metin-ikincil leading-relaxed">
               {ofis?.unvan ?? "Başkent Emlak"} — portföy, talep ve randevu
               yönetimini tek sistemde toplayan emlak platformu.

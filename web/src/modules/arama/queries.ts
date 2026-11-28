@@ -19,6 +19,40 @@ export type AramaSonucu = {
  * Yalnızca ilanlar_public görünümü sorgulanır: bu görünüm sahip bilgisi
  * ve açık adres içermez, dolayısıyla ziyaretçiye kişisel veri sızmaz.
  */
+function filtreleriUygula(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sorgu: any,
+  filtre: AramaFiltresi,
+) {
+  let s = sorgu;
+  if (filtre.islem_turu) s = s.eq("islem_turu", filtre.islem_turu);
+  if (filtre.emlak_turu) s = s.eq("emlak_turu", filtre.emlak_turu);
+  if (filtre.il) s = s.ilike("il", filtre.il);
+  if (filtre.ilce) s = s.ilike("ilce", filtre.ilce);
+  if (filtre.min_fiyat !== undefined) s = s.gte("fiyat", filtre.min_fiyat);
+  if (filtre.max_fiyat !== undefined) s = s.lte("fiyat", filtre.max_fiyat);
+  if (filtre.min_m2 !== undefined) s = s.gte("m2_brut", filtre.min_m2);
+  if (filtre.oda_sayilari?.length) s = s.in("oda_sayisi", filtre.oda_sayilari);
+  if (filtre.max_bina_yasi !== undefined)
+    s = s.lte("bina_yasi", filtre.max_bina_yasi);
+  if (filtre.asansor) s = s.eq("asansor", true);
+  if (filtre.otopark) s = s.eq("otopark", true);
+  if (filtre.esyali) s = s.eq("esyali", true);
+  if (filtre.site_icinde) s = s.eq("site_icinde", true);
+  if (filtre.krediye_uygun) s = s.eq("krediye_uygun", true);
+
+  switch (filtre.siralama) {
+    case "fiyat_artan":
+      return s.order("fiyat", { ascending: true });
+    case "fiyat_azalan":
+      return s.order("fiyat", { ascending: false });
+    case "m2_azalan":
+      return s.order("m2_brut", { ascending: false });
+    default:
+      return s.order("created_at", { ascending: false });
+  }
+}
+
 export async function ilanlariAra(
   filtre: AramaFiltresi,
 ): Promise<AramaSonucu> {
@@ -26,41 +60,13 @@ export async function ilanlariAra(
   const sayfa = filtre.sayfa ?? 1;
   const baslangic = (sayfa - 1) * SAYFA_BOYUTU;
 
-  let sorgu = supabase
-    .from("ilanlar_public")
-    .select("*", { count: "exact" })
-    .range(baslangic, baslangic + SAYFA_BOYUTU - 1);
-
-  if (filtre.islem_turu) sorgu = sorgu.eq("islem_turu", filtre.islem_turu);
-  if (filtre.emlak_turu) sorgu = sorgu.eq("emlak_turu", filtre.emlak_turu);
-  if (filtre.il) sorgu = sorgu.ilike("il", filtre.il);
-  if (filtre.ilce) sorgu = sorgu.ilike("ilce", filtre.ilce);
-  if (filtre.min_fiyat !== undefined) sorgu = sorgu.gte("fiyat", filtre.min_fiyat);
-  if (filtre.max_fiyat !== undefined) sorgu = sorgu.lte("fiyat", filtre.max_fiyat);
-  if (filtre.min_m2 !== undefined) sorgu = sorgu.gte("m2_brut", filtre.min_m2);
-  if (filtre.oda_sayilari?.length)
-    sorgu = sorgu.in("oda_sayisi", filtre.oda_sayilari);
-  if (filtre.max_bina_yasi !== undefined)
-    sorgu = sorgu.lte("bina_yasi", filtre.max_bina_yasi);
-  if (filtre.asansor) sorgu = sorgu.eq("asansor", true);
-  if (filtre.otopark) sorgu = sorgu.eq("otopark", true);
-  if (filtre.esyali) sorgu = sorgu.eq("esyali", true);
-  if (filtre.site_icinde) sorgu = sorgu.eq("site_icinde", true);
-  if (filtre.krediye_uygun) sorgu = sorgu.eq("krediye_uygun", true);
-
-  switch (filtre.siralama) {
-    case "fiyat_artan":
-      sorgu = sorgu.order("fiyat", { ascending: true });
-      break;
-    case "fiyat_azalan":
-      sorgu = sorgu.order("fiyat", { ascending: false });
-      break;
-    case "m2_azalan":
-      sorgu = sorgu.order("m2_brut", { ascending: false });
-      break;
-    default:
-      sorgu = sorgu.order("created_at", { ascending: false });
-  }
+  const sorgu = filtreleriUygula(
+    supabase
+      .from("ilanlar_public")
+      .select("*", { count: "exact" })
+      .range(baslangic, baslangic + SAYFA_BOYUTU - 1),
+    filtre,
+  );
 
   const { data, count } = await sorgu;
   const toplam = count ?? 0;
@@ -71,6 +77,19 @@ export async function ilanlariAra(
     sayfa,
     sayfaSayisi: Math.max(1, Math.ceil(toplam / SAYFA_BOYUTU)),
   };
+}
+
+/** Toplu yazıcı/PDF çıktısı için sayfalamasız tüm eşleşen ilanlar. */
+export async function tumIlanlariAra(
+  filtre: AramaFiltresi,
+): Promise<IlanPublic[]> {
+  const supabase = await sunucuIstemcisi();
+  const sorgu = filtreleriUygula(
+    supabase.from("ilanlar_public").select("*").limit(500),
+    filtre,
+  );
+  const { data } = await sorgu;
+  return (data ?? []) as IlanPublic[];
 }
 
 /**

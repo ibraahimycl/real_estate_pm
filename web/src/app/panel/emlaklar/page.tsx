@@ -30,12 +30,29 @@ export default async function EmlaklarSayfasi({
 
   const liste = await portfoyListele({ arama, durum, islemTuru, sayfa });
 
+  const ciktiParams = new URLSearchParams();
+  if (arama) ciktiParams.set("arama", arama);
+  if (durum) ciktiParams.set("durum", durum);
+  if (islemTuru) ciktiParams.set("islem", islemTuru);
+  const ciktiYolu = ciktiParams.toString()
+    ? `/panel/emlaklar/cikti?${ciktiParams.toString()}`
+    : "/panel/emlaklar/cikti";
+
   return (
     <>
       <SayfaBasligi
         baslik="Emlak Tanımı"
         aciklama="Satıcı ve kiraya veren müşteriler tarafından ofise verilen emlak kayıtları."
-        eylem={<BagButon href="/panel/emlaklar/yeni">Yeni İlan</BagButon>}
+        eylem={
+          <>
+            {liste.toplam > 0 && (
+              <BagButon href={ciktiYolu} gorunum="ikincil">
+                Listeyi Yazdır / PDF
+              </BagButon>
+            )}
+            <BagButon href="/panel/emlaklar/yeni">Yeni İlan</BagButon>
+          </>
+        }
       />
 
       {sp.kayit === "silindi" && (
@@ -142,7 +159,13 @@ export default async function EmlaklarSayfasi({
                         </p>
                       </Td>
                       <Td>
-                        <Rozet ton={durumTonu(e.durum)}>{EMLAK_DURUMU[e.durum]}</Rozet>
+                        {e.durum === "pasif" && !e.danisman_id ? (
+                          <Rozet ton="uyari">Onay Bekliyor</Rozet>
+                        ) : (
+                          <Rozet ton={durumTonu(e.durum)}>
+                            {EMLAK_DURUMU[e.durum]}
+                          </Rozet>
+                        )}
                       </Td>
                     </Tr>
                   ))}

@@ -49,6 +49,7 @@ export async function isyeriKaydet(
   if (error) return dbHatasi(error);
 
   revalidatePath("/panel/isyeri");
+  revalidatePath("/", "layout");
   return {
     basarili: true,
     mesaj: id

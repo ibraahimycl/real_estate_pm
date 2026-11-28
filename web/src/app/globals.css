@@ -85,7 +85,10 @@ body {
   a[href]::after {
     content: "";
   }
-  table {
-    page-break-inside: avoid;
+  thead {
+    display: table-header-group;
+  }
+  tr {
+    break-inside: avoid;
   }
 }

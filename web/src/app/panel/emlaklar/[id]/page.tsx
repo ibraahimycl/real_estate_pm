@@ -14,7 +14,7 @@ import { Rozet } from "@/components/ui/Rozet";
 import { Uyari } from "@/components/ui/Uyari";
 import { BagButon } from "@/components/ui/Buton";
 import { EmlakFormu } from "../EmlakFormu";
-import { eslestirmeyiCalistir } from "@/modules/emlak/actions";
+import { EslestirmeKarti } from "./EslestirmeKarti";
 import { FotografYonetimi } from "./FotografYonetimi";
 import { SilButonu } from "./SilButonu";
 import { ISLEM_TURU } from "@/lib/etiketler";
@@ -115,59 +115,45 @@ export default async function EmlakDetaySayfasi({
             </KartGovde>
           </Kart>
 
-          <Kart>
-            <KartBaslik
-              baslik="Eşleşen Müşteri Talepleri"
-              aciklama={`${uyanTalepler.length} talep bu ilanın kriterlerine uyuyor`}
-              eylem={
-                <form action={eslestirmeyiCalistir}>
-                  <input type="hidden" name="id" value={emlak.id} />
-                  <button
-                    type="submit"
-                    className="text-xs font-medium text-marka-600 hover:underline"
-                  >
-                    Yeniden tara
-                  </button>
-                </form>
-              }
-            />
-            <KartGovde className="space-y-3">
-              {uyanTalepler.length === 0 ? (
-                <p className="text-sm text-metin-ikincil">
-                  Bu ilana uyan aktif talep yok.
-                </p>
-              ) : (
-                uyanTalepler.slice(0, 6).map(({ talep, skor, gerekceler }) => (
-                  <div
-                    key={talep.id}
-                    className="rounded-lg border border-cizgi p-3"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-metin">
-                          {talep.ad_soyad}
-                        </p>
-                        <p className="text-xs text-metin-silik rakam">
-                          {telefon(talep.telefon)}
-                        </p>
-                      </div>
-                      <Rozet ton={skor >= 80 ? "basari" : "uyari"}>
-                        %{skor} uyum
-                      </Rozet>
-                    </div>
-                    <p className="text-xs text-metin-ikincil mt-1.5">
-                      {gerekceler.slice(0, 3).join(" · ")}
-                    </p>
-                    {!talep.bildirim_izni && (
-                      <p className="text-[11px] text-metin-silik mt-1">
-                        Bildirim izni yok — mesaj gönderilmedi.
+          <EslestirmeKarti
+            emlakId={emlak.id}
+            talepSayisi={uyanTalepler.length}
+          >
+            {uyanTalepler.length === 0 ? (
+              <p className="text-sm text-metin-ikincil">
+                Bu ilana uyan aktif talep yok.
+              </p>
+            ) : (
+              uyanTalepler.slice(0, 6).map(({ talep, skor, gerekceler }) => (
+                <div
+                  key={talep.id}
+                  className="rounded-lg border border-cizgi p-3"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-metin">
+                        {talep.ad_soyad}
                       </p>
-                    )}
+                      <p className="text-xs text-metin-silik rakam">
+                        {telefon(talep.telefon)}
+                      </p>
+                    </div>
+                    <Rozet ton={skor >= 80 ? "basari" : "uyari"}>
+                      %{skor} uyum
+                    </Rozet>
                   </div>
-                ))
-              )}
-            </KartGovde>
-          </Kart>
+                  <p className="text-xs text-metin-ikincil mt-1.5">
+                    {gerekceler.slice(0, 3).join(" · ")}
+                  </p>
+                  {!talep.bildirim_izni && (
+                    <p className="text-[11px] text-metin-silik mt-1">
+                      Bildirim izni yok — mesaj gönderilmedi.
+                    </p>
+                  )}
+                </div>
+              ))
+            )}
+          </EslestirmeKarti>
 
           <Kart>
             <KartBaslik baslik="Fotoğraflar" />

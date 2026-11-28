@@ -62,6 +62,88 @@ export async function portfoyListele({
   };
 }
 
+/** Toplu yazıcı/PDF çıktısı için sayfalamasız portföy listesi. */
+export async function portfoyTumunuListele({
+  arama,
+  durum,
+  islemTuru,
+}: {
+  arama?: string;
+  durum?: EmlakDurumu;
+  islemTuru?: IslemTuru;
+}) {
+  const supabase = await sunucuIstemcisi();
+
+  let sorgu = supabase
+    .from("emlaklar")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(500);
+
+  if (arama) {
+    const d = arama.replace(/[%,]/g, " ").trim();
+    const ilanNo = Number(d);
+    sorgu =
+      Number.isInteger(ilanNo) && d !== ""
+        ? sorgu.or(`baslik.ilike.%${d}%,ilce.ilike.%${d}%,ilan_no.eq.${ilanNo}`)
+        : sorgu.or(`baslik.ilike.%${d}%,ilce.ilike.%${d}%,mahalle.ilike.%${d}%`);
+  }
+  if (durum) sorgu = sorgu.eq("durum", durum);
+  if (islemTuru) sorgu = sorgu.eq("islem_turu", islemTuru);
+
+  const { data } = await sorgu;
+  const kayitlar = (data ?? []) as Emlak[];
+  const sahipler = await sahipHaritasi(kayitlar.map((e) => e.sahip_profil_id));
+
+  return kayitlar.map((e) => ({
+    ...e,
+    sahip: sahipler.get(e.sahip_profil_id) ?? null,
+  }));
+}
+
+/**
+ * Müşterilerin emlakçı onayına gönderdiği ilan talepleri.
+ * Mevcut şema ile uyumlu: durum='pasif' ve danisman_id IS NULL olan kayıtlar.
+ */
+export async function ilanTalepleriniListele() {
+  const supabase = await sunucuIstemcisi();
+  const { data } = await supabase
+    .from("emlaklar")
+    .select("*")
+    .eq("durum", "pasif")
+    .is("danisman_id", null)
+    .order("created_at", { ascending: false });
+
+  const kayitlar = (data ?? []) as Emlak[];
+  if (kayitlar.length === 0) return [];
+
+  const [sahipler, fotoSonuc] = await Promise.all([
+    sahipHaritasi(kayitlar.map((e) => e.sahip_profil_id)),
+    supabase
+      .from("emlak_fotograflari")
+      .select("*")
+      .in(
+        "emlak_id",
+        kayitlar.map((e) => e.id),
+      )
+      .order("kapak", { ascending: false })
+      .order("sira"),
+  ]);
+
+  const fotoHaritasi = new Map<string, EmlakFotografi[]>();
+  for (const f of (fotoSonuc.data ?? []) as EmlakFotografi[]) {
+    const liste = fotoHaritasi.get(f.emlak_id) ?? [];
+    liste.push(f);
+    fotoHaritasi.set(f.emlak_id, liste);
+  }
+
+  return kayitlar.map((e) => ({
+    ...e,
+    sahip: sahipler.get(e.sahip_profil_id) ?? null,
+    fotograflar: fotoHaritasi.get(e.id) ?? [],
+  }));
+}
+
 export type SahipOzeti = { ad: string; soyad: string; cep_telefon: string };
 
 /** Verilen profil kimlikleri için ad/telefon haritası döndürür. */
