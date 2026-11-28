@@ -101,6 +101,49 @@ export async function portfoyTumunuListele({
   }));
 }
 
+/**
+ * Müşterilerin emlakçı onayına gönderdiği ilan talepleri.
+ * Mevcut şema ile uyumlu: durum='pasif' ve danisman_id IS NULL olan kayıtlar.
+ */
+export async function ilanTalepleriniListele() {
+  const supabase = await sunucuIstemcisi();
+  const { data } = await supabase
+    .from("emlaklar")
+    .select("*")
+    .eq("durum", "pasif")
+    .is("danisman_id", null)
+    .order("created_at", { ascending: false });
+
+  const kayitlar = (data ?? []) as Emlak[];
+  if (kayitlar.length === 0) return [];
+
+  const [sahipler, fotoSonuc] = await Promise.all([
+    sahipHaritasi(kayitlar.map((e) => e.sahip_profil_id)),
+    supabase
+      .from("emlak_fotograflari")
+      .select("*")
+      .in(
+        "emlak_id",
+        kayitlar.map((e) => e.id),
+      )
+      .order("kapak", { ascending: false })
+      .order("sira"),
+  ]);
+
+  const fotoHaritasi = new Map<string, EmlakFotografi[]>();
+  for (const f of (fotoSonuc.data ?? []) as EmlakFotografi[]) {
+    const liste = fotoHaritasi.get(f.emlak_id) ?? [];
+    liste.push(f);
+    fotoHaritasi.set(f.emlak_id, liste);
+  }
+
+  return kayitlar.map((e) => ({
+    ...e,
+    sahip: sahipler.get(e.sahip_profil_id) ?? null,
+    fotograflar: fotoHaritasi.get(e.id) ?? [],
+  }));
+}
+
 export type SahipOzeti = { ad: string; soyad: string; cep_telefon: string };
 
 /** Verilen profil kimlikleri için ad/telefon haritası döndürür. */

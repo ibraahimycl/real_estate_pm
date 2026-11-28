@@ -22,8 +22,11 @@ export const metadata: Metadata = { title: "İlanlarım" };
  * (görüntülenme, kaydedilme, randevu) okunur biçimde gösterilir.
  * Bu kısıt uygulamada değil, veri tabanı RLS politikalarında tanımlıdır.
  */
-export default async function IlanlarimSayfasi() {
+export default async function IlanlarimSayfasi({
+  searchParams,
+}: PageProps<"/hesabim/ilanlarim">) {
   const profil = await gerektirGiris("/hesabim/ilanlarim");
+  const sp = await searchParams;
   const supabase = await sunucuIstemcisi();
 
   const { data } = await supabase
@@ -48,17 +51,35 @@ export default async function IlanlarimSayfasi() {
 
   return (
     <>
-      <h1 className="text-xl font-semibold text-metin">İlanlarım</h1>
-      <p className="mt-1 mb-5 text-sm text-metin-ikincil">
-        Emlak ofisine verdiğiniz mülklerin ilan performansı.
-      </p>
+      <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-semibold text-metin">İlanlarım</h1>
+          <p className="mt-1 text-sm text-metin-ikincil">
+            Emlak ofisine verdiğiniz mülklerin onay durumu ve ilan performansı.
+          </p>
+        </div>
+        <BagButon href="/hesabim/ilanlarim/yeni">Yeni İlan Oluştur</BagButon>
+      </div>
+
+      {sp.kayit === "onaya-gonderildi" && (
+        <div className="mb-5">
+          <Uyari tur="basari" baslik="İlan talebiniz alındı.">
+            Mülk bilgileriniz emlak danışmanının onayına gönderildi. Onay
+            verildiğinde ilanınız site kataloğunda yayınlanacaktır.
+          </Uyari>
+        </div>
+      )}
 
       {ilanlar.length === 0 ? (
         <Kart>
           <BosDurum
             baslik="Adınıza kayıtlı ilan yok"
-            aciklama="Emlak ofisi sizin adınıza bir ilan girdiğinde — kaydınızdaki e-posta adresiyle eşleştirilerek — ilanlar burada görünür."
-            eylem={<BagButon href="/">İlanlara göz at</BagButon>}
+            aciklama="Satmak veya kiralamak istediğiniz mülk için yeni ilan oluşturup emlakçı onayına gönderebilirsiniz."
+            eylem={
+              <BagButon href="/hesabim/ilanlarim/yeni">
+                Yeni İlan Oluştur
+              </BagButon>
+            }
           />
         </Kart>
       ) : (
@@ -84,6 +105,7 @@ export default async function IlanlarimSayfasi() {
           <ul className="space-y-3">
             {ilanlar.map((ilan, i) => {
               const e = etkilesimler[i];
+              const onayBekliyor = ilan.durum === "pasif" && !ilan.danisman_id;
               const yayinda = ilan.durum === "aktif" || ilan.durum === "rezerve";
 
               return (
@@ -107,15 +129,21 @@ export default async function IlanlarimSayfasi() {
                           <p className="rakam mt-0.5 text-xs text-metin-silik">
                             İlan #{ilan.ilan_no} · {ISLEM_TURU[ilan.islem_turu]}{" "}
                             · {EMLAK_TURU[ilan.emlak_turu]} ·{" "}
-                            {tarih(ilan.yayin_tarihi)} tarihinde yayınlandı
+                            {onayBekliyor
+                              ? "Emlak danışmanı onayı bekleniyor"
+                              : `${tarih(ilan.yayin_tarihi)} tarihinde yayınlandı`}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="rakam font-semibold text-metin">
                             {para(ilan.fiyat)}
                           </p>
-                          <Rozet ton={durumTonu(ilan.durum)}>
-                            {EMLAK_DURUMU[ilan.durum]}
+                          <Rozet
+                            ton={onayBekliyor ? "uyari" : durumTonu(ilan.durum)}
+                          >
+                            {onayBekliyor
+                              ? "Onay Bekliyor"
+                              : EMLAK_DURUMU[ilan.durum]}
                           </Rozet>
                         </div>
                       </div>

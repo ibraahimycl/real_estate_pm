@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   // Tüm rotalar oturum/rol bağımlı veri gösterdiği için dinamik çalışır.
   cacheComponents: false,
   partialPrefetching: false,
+  experimental: {
+    // Fotoğraf yükleme formları 5 MB'a kadar görsel kabul ediyor
+    serverActions: {
+      bodySizeLimit: "6mb",
+    },
+  },
 
   // Tailwind CSS v4, Turbopack yükleyicisi üzerinden işlenir.
   // Bu kural olmadan @theme bloğu çözümlenmez ve hiçbir utility sınıfı

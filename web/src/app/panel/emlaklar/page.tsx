@@ -159,7 +159,13 @@ export default async function EmlaklarSayfasi({
                         </p>
                       </Td>
                       <Td>
-                        <Rozet ton={durumTonu(e.durum)}>{EMLAK_DURUMU[e.durum]}</Rozet>
+                        {e.durum === "pasif" && !e.danisman_id ? (
+                          <Rozet ton="uyari">Onay Bekliyor</Rozet>
+                        ) : (
+                          <Rozet ton={durumTonu(e.durum)}>
+                            {EMLAK_DURUMU[e.durum]}
+                          </Rozet>
+                        )}
                       </Td>
                     </Tr>
                   ))}

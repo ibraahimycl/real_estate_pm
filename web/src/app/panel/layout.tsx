@@ -18,18 +18,27 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
   const supabase = await sunucuIstemcisi();
 
   // Menüdeki bekleyen iş rozetleri
-  const [{ count: bekleyenRandevu }, { count: okunmamisMesaj }, ofis] =
-    await Promise.all([
-      supabase
-        .from("randevular")
-        .select("id", { count: "exact", head: true })
-        .eq("durum", "talep"),
-      supabase
-        .from("mesajlar")
-        .select("id", { count: "exact", head: true })
-        .eq("okundu", false),
-      isyeriGetir(),
-    ]);
+  const [
+    { count: bekleyenRandevu },
+    { count: okunmamisMesaj },
+    { count: bekleyenIlanTalebi },
+    ofis,
+  ] = await Promise.all([
+    supabase
+      .from("randevular")
+      .select("id", { count: "exact", head: true })
+      .eq("durum", "talep"),
+    supabase
+      .from("mesajlar")
+      .select("id", { count: "exact", head: true })
+      .eq("okundu", false),
+    supabase
+      .from("emlaklar")
+      .select("id", { count: "exact", head: true })
+      .eq("durum", "pasif")
+      .is("danisman_id", null),
+    isyeriGetir(),
+  ]);
 
   const gruplar: MenuGrubu[] = [
     {
@@ -48,6 +57,11 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
       baslik: "İşlemler",
       ogeler: [
         { yol: "/panel/arama", etiket: "Emlak Arama" },
+        {
+          yol: "/panel/ilan-talepleri",
+          etiket: "İlan Talepleri",
+          rozet: bekleyenIlanTalebi ?? 0,
+        },
         { yol: "/panel/talepler", etiket: "Müşteri Talepleri" },
         { yol: "/panel/talep-analizi", etiket: "Talep Analizi" },
         {

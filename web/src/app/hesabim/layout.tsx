@@ -57,6 +57,7 @@ export default async function HesabimLayout({
     {
       baslik: "Mülklerim",
       ogeler: [
+        { yol: "/hesabim/ilanlarim/yeni", etiket: "Yeni İlan Oluştur" },
         {
           yol: "/hesabim/ilanlarim",
           etiket: "İlanlarım",
