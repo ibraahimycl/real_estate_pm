@@ -43,10 +43,19 @@ export default async function PanelAramaSayfasi({
   }
 
   const sayfaParametreleri: Record<string, string | undefined> = {};
+  const ciktiParams = new URLSearchParams();
   for (const [anahtar, deger] of Object.entries(sp)) {
     if (anahtar === "sayfa") continue;
-    if (typeof deger === "string") sayfaParametreleri[anahtar] = deger;
+    if (typeof deger === "string") {
+      sayfaParametreleri[anahtar] = deger;
+      if (deger !== "") ciktiParams.set(anahtar, deger);
+    } else if (Array.isArray(deger)) {
+      for (const item of deger) if (item !== "") ciktiParams.append(anahtar, item);
+    }
   }
+  const ciktiYolu = ciktiParams.toString()
+    ? `/panel/arama/cikti?${ciktiParams.toString()}`
+    : "/panel/arama/cikti";
 
   return (
     <>
@@ -93,6 +102,13 @@ export default async function PanelAramaSayfasi({
             <KartBaslik
               baslik="Sorgu Sonucu"
               aciklama={`${sonuc.toplam} uygun kayıt`}
+              eylem={
+                sonuc.toplam > 0 ? (
+                  <BagButon href={ciktiYolu} gorunum="ikincil" boyut="sm">
+                    Listeyi Yazdır / PDF
+                  </BagButon>
+                ) : undefined
+              }
             />
 
             {sonuc.ilanlar.length === 0 ? (

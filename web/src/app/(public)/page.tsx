@@ -33,12 +33,21 @@ export default async function AnaSayfa({ searchParams }: PageProps<"/">) {
     await aramayiLogla(filtre, sonuc.toplam, profil?.id ?? null);
   }
 
-  // Sayfalama bağlantılarının mevcut filtreyi koruması için
+  // Sayfalama ve yazıcı çıktısı bağlantılarının mevcut filtreyi koruması için
   const sayfaParametreleri: Record<string, string | undefined> = {};
+  const ciktiParams = new URLSearchParams();
   for (const [anahtar, deger] of Object.entries(sp)) {
     if (anahtar === "sayfa") continue;
-    if (typeof deger === "string") sayfaParametreleri[anahtar] = deger;
+    if (typeof deger === "string") {
+      sayfaParametreleri[anahtar] = deger;
+      if (deger !== "") ciktiParams.set(anahtar, deger);
+    } else if (Array.isArray(deger)) {
+      for (const item of deger) if (item !== "") ciktiParams.append(anahtar, item);
+    }
   }
+  const ciktiYolu = ciktiParams.toString()
+    ? `/cikti?${ciktiParams.toString()}`
+    : "/cikti";
 
   return (
     <>
@@ -86,6 +95,11 @@ export default async function AnaSayfa({ searchParams }: PageProps<"/">) {
               </span>{" "}
               ilan bulundu
             </p>
+            {sonuc.toplam > 0 && (
+              <BagButon href={ciktiYolu} gorunum="ikincil" boyut="sm">
+                Listeyi Yazdır / PDF
+              </BagButon>
+            )}
           </div>
 
           {sonuc.ilanlar.length === 0 ? (
