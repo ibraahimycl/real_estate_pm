@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { gerektirGiris, emlakciMi } from "@/lib/auth";
 import { sunucuIstemcisi } from "@/lib/supabase/server";
+import { isyeriGetir } from "@/modules/isyeri/queries";
 import { Marka } from "@/components/Marka";
 import { CikisButonu } from "@/components/CikisButonu";
 import { PanelMenu, type MenuGrubu } from "@/components/panel/PanelMenu";
@@ -18,7 +19,7 @@ export default async function HesabimLayout({
   const profil = await gerektirGiris();
   const supabase = await sunucuIstemcisi();
 
-  const [{ count: ilanSayisi }, { count: okunmamis }] = await Promise.all([
+  const [{ count: ilanSayisi }, { count: okunmamis }, ofis] = await Promise.all([
     supabase
       .from("emlaklar")
       .select("id", { count: "exact", head: true })
@@ -28,6 +29,7 @@ export default async function HesabimLayout({
       .select("id", { count: "exact", head: true })
       .eq("profil_id", profil.id)
       .eq("okundu", false),
+    isyeriGetir(),
   ]);
 
   const gruplar: MenuGrubu[] = [
@@ -69,7 +71,7 @@ export default async function HesabimLayout({
     <div className="flex min-h-dvh flex-col">
       <header className="border-b border-cizgi bg-yuzey yazdirma-gizle">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-          <Marka />
+          <Marka unvan={ofis?.unvan} />
           <div className="ml-auto flex items-center gap-3">
             {emlakciMi(profil) && (
               <BagButon href="/panel" gorunum="ikincil" boyut="sm">

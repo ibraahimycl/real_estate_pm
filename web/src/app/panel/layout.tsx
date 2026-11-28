@@ -1,5 +1,6 @@
 import { gerektirEmlakci } from "@/lib/auth";
 import { sunucuIstemcisi } from "@/lib/supabase/server";
+import { isyeriGetir } from "@/modules/isyeri/queries";
 import { Marka } from "@/components/Marka";
 import { CikisButonu } from "@/components/CikisButonu";
 import { PanelMenu, type MenuGrubu } from "@/components/panel/PanelMenu";
@@ -17,7 +18,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
   const supabase = await sunucuIstemcisi();
 
   // Menüdeki bekleyen iş rozetleri
-  const [{ count: bekleyenRandevu }, { count: okunmamisMesaj }] =
+  const [{ count: bekleyenRandevu }, { count: okunmamisMesaj }, ofis] =
     await Promise.all([
       supabase
         .from("randevular")
@@ -27,6 +28,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
         .from("mesajlar")
         .select("id", { count: "exact", head: true })
         .eq("okundu", false),
+      isyeriGetir(),
     ]);
 
   const gruplar: MenuGrubu[] = [
@@ -69,7 +71,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
       {/* Yan menü */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-cizgi bg-yuzey yazdirma-gizle">
         <div className="px-5 py-5 border-b border-cizgi">
-          <Marka boyut="sm" href="/panel" />
+          <Marka boyut="sm" href="/panel" unvan={ofis?.unvan} />
         </div>
         <div className="flex-1 overflow-y-auto px-2 py-4">
           <PanelMenu gruplar={gruplar} />
@@ -95,7 +97,7 @@ export default async function PanelLayout({ children }: LayoutProps<"/panel">) {
       {/* Küçük ekran üst çubuğu */}
       <div className="flex-1 min-w-0 flex flex-col">
         <header className="lg:hidden flex items-center justify-between gap-3 border-b border-cizgi bg-yuzey px-4 py-3 yazdirma-gizle">
-          <Marka boyut="sm" href="/panel" />
+          <Marka boyut="sm" href="/panel" unvan={ofis?.unvan} />
           <CikisButonu />
         </header>
         <div className="lg:hidden border-b border-cizgi bg-yuzey px-2 py-2 overflow-x-auto yazdirma-gizle">

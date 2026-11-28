@@ -1,11 +1,14 @@
 import { Marka } from "@/components/Marka";
+import { isyeriGetir } from "@/modules/isyeri/queries";
 
-export default function AuthLayout({ children }: LayoutProps<"/">) {
+export default async function AuthLayout({ children }: LayoutProps<"/">) {
+  const ofis = await isyeriGetir();
+
   return (
     <div className="min-h-dvh grid lg:grid-cols-2">
       {/* Sol: tanıtım paneli (küçük ekranda gizlenir) */}
       <div className="hidden lg:flex flex-col justify-between bg-marka-700 text-white p-12">
-        <Marka boyut="lg" />
+        <Marka boyut="lg" unvan={ofis?.unvan} />
         <div className="max-w-md">
           <h1 className="text-3xl font-semibold leading-tight">
             Portföyünüzü, müşterilerinizi ve taleplerinizi tek yerden yönetin.
@@ -23,7 +26,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
           </ul>
         </div>
         <p className="text-xs text-marka-300">
-          Başkent Emlak Yönetim Ltd. Şti.
+          {ofis?.unvan ?? "Başkent Emlak"}
         </p>
       </div>
 
@@ -31,7 +34,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       <div className="flex flex-col justify-center px-6 py-12 sm:px-12">
         <div className="w-full max-w-sm mx-auto">
           <div className="lg:hidden mb-8">
-            <Marka />
+            <Marka unvan={ofis?.unvan} />
           </div>
           {children}
         </div>
