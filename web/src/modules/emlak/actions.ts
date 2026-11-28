@@ -263,14 +263,53 @@ export async function kapakYap(form: FormData): Promise<void> {
  * pasiften aktife alındığında taramayı tekrarlamak içindir.
  * Mükerrer mesaj üretilmez: UNIQUE(talep_id, emlak_id) kısıtı engeller.
  */
-export async function eslestirmeyiCalistir(form: FormData): Promise<void> {
+export async function eslestirmeyiCalistir(
+  _oncekiDurum: EylemSonucu,
+  form: FormData,
+): Promise<EylemSonucu> {
   await gerektirEmlakci();
   const id = metin(form, "id");
-  if (!id) return;
+  if (!id) return { basarili: false, mesaj: "İlan bulunamadı." };
 
-  await yeniIlaniEslestir(id);
+  const supabase = await sunucuIstemcisi();
+  const { data: emlak } = await supabase
+    .from("emlaklar")
+    .select("durum")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (!emlak) {
+    return { basarili: false, mesaj: "İlan bulunamadı." };
+  }
+  if (emlak.durum !== "aktif") {
+    return {
+      basarili: false,
+      mesaj:
+        "İlan 'Aktif' durumda olmadığı için eşleştirme taraması yapılmadı.",
+    };
+  }
+
+  const uretilen = await yeniIlaniEslestir(id);
 
   revalidatePath(`/panel/emlaklar/${id}`);
   revalidatePath("/panel/mesajlar");
   revalidatePath("/panel", "layout");
+
+  const saat = new Date().toLocaleTimeString("tr-TR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  if (uretilen > 0) {
+    return {
+      basarili: true,
+      mesaj: `Tarama tamamlandı (${saat}): ${uretilen} müşteri için yeni eşleşme mesajı üretildi.`,
+    };
+  }
+
+  return {
+    basarili: true,
+    mesaj: `Tarama tamamlandı (${saat}): Yeni eşleşme mesajı üretilmedi (uygun yeni talep yok veya mesajlar daha önce gönderilmiş).`,
+  };
 }
